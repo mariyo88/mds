@@ -114,10 +114,10 @@ class OrderPublisherIntegrationTest {
 
         assertThat(record).as("Expected a Kafka record but received none within timeout").isNotNull();
         assertThat(record.key()).isEqualTo("order-it-001");
-        assertThat(record.value().getOrderId()).isEqualTo("order-it-001");
-        assertThat(record.value().getItemId()).isEqualTo("item-1");
-        assertThat(record.value().getQuantity()).isEqualTo(3);
-        assertThat(record.value().getTimestamp()).isNotNull();
+        assertThat(record.value().orderId()).isEqualTo("order-it-001");
+        assertThat(record.value().itemId()).isEqualTo("item-1");
+        assertThat(record.value().quantity()).isEqualTo(3);
+        assertThat(record.value().timestamp()).isNotNull();
     }
 
     @Test
@@ -160,6 +160,6 @@ class OrderPublisherIntegrationTest {
         assertThat(record2).isNotNull();
 
         // Both events should be present, order may vary
-        assertThat(record1.value().getOrderId()).isNotEqualTo(record2.value().getOrderId());
+        assertThat(record1.value().orderId()).isNotEqualTo(record2.value().orderId());
     }
 }

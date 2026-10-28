@@ -72,7 +72,7 @@ class InventoryConsumerIntegrationTest {
         KafkaTemplate<String, OrderEvent> producer = buildProducerTemplate();
         OrderEvent event = OrderEvent.of("order-int-1", "item-1", 3);
 
-        producer.send(new ProducerRecord<>("orders", event.getOrderId(), event));
+        producer.send(new ProducerRecord<>("orders", event.orderId(), event));
 
         await().atMost(10, TimeUnit.SECONDS)
                 .untilAsserted(() ->
@@ -86,7 +86,7 @@ class InventoryConsumerIntegrationTest {
         // item-2 has 5, request 100 — should be rejected
         OrderEvent event = OrderEvent.of("order-int-2", "item-2", 100);
 
-        producer.send(new ProducerRecord<>("orders", event.getOrderId(), event));
+        producer.send(new ProducerRecord<>("orders", event.orderId(), event));
 
         // Stock should remain 5 — give consumer time to process, then assert stable
         await().atMost(10, TimeUnit.SECONDS)
@@ -100,7 +100,7 @@ class InventoryConsumerIntegrationTest {
         KafkaTemplate<String, OrderEvent> producer = buildProducerTemplate();
         OrderEvent event = OrderEvent.of("order-int-3", "item-unknown", 1);
 
-        producer.send(new ProducerRecord<>("orders", event.getOrderId(), event));
+        producer.send(new ProducerRecord<>("orders", event.orderId(), event));
 
         // No stock change expected; just verify consumer doesn't crash
         // and that known item stocks are untouched

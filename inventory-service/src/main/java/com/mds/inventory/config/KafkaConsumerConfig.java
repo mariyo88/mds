@@ -22,13 +22,13 @@ import java.util.Map;
 
 /**
  * Kafka consumer configuration with production-grade reliability:
- *
+ * <p>
  * - Manual offset commit (MANUAL_IMMEDIATE): offset is committed only after
  *   successful processing, preventing message loss on consumer crash.
- *
+ * <p>
  * - DefaultErrorHandler + ExponentialBackOff: retries failed messages
  *   up to 3 times (1s → 2s → 4s) before sending to the DLQ.
- *
+ * <p>
  * - DeadLetterPublishingRecoverer: exhausted messages are published to
  *   "orders.DLQ" for later inspection / replay without blocking the main topic.
  */
@@ -110,7 +110,7 @@ public class KafkaConsumerConfig {
      *   attempt 2 — after ~1 second
      *   attempt 3 — after ~2 seconds
      *   attempt 4 — after ~4 seconds  → then sent to DLQ
-     *
+     * <p>
      * MaxAttempts = 4 means 1 initial + 3 retries.
      */
     @Bean

@@ -30,10 +30,10 @@ class OrderEventSerializationTest {
         String json = objectMapper.writeValueAsString(original);
         OrderEvent deserialized = objectMapper.readValue(json, OrderEvent.class);
 
-        assertThat(deserialized.getOrderId()).isEqualTo("order-123");
-        assertThat(deserialized.getItemId()).isEqualTo("item-1");
-        assertThat(deserialized.getQuantity()).isEqualTo(3);
-        assertThat(deserialized.getTimestamp()).isEqualTo(now);
+        assertThat(deserialized.orderId()).isEqualTo("order-123");
+        assertThat(deserialized.itemId()).isEqualTo("item-1");
+        assertThat(deserialized.quantity()).isEqualTo(3);
+        assertThat(deserialized.timestamp()).isEqualTo(now);
     }
 
     @Test
@@ -56,7 +56,7 @@ class OrderEventSerializationTest {
         OrderEvent event = OrderEvent.of("order-789", "item-3", 2);
         Instant after = Instant.now();
 
-        assertThat(event.getTimestamp()).isBetween(before, after);
+        assertThat(event.timestamp()).isBetween(before, after);
     }
 
     @Test
@@ -89,6 +89,6 @@ class OrderEventSerializationTest {
         String json = "{\"orderId\":\"order-1\",\"itemId\":\"item-1\",\"quantity\":2,\"timestamp\":null}";
         OrderEvent event = objectMapper.readValue(json, OrderEvent.class);
 
-        assertThat(event.getTimestamp()).isNotNull();
+        assertThat(event.timestamp()).isNotNull();
     }
 }

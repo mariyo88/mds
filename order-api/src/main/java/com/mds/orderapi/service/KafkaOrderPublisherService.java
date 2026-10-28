@@ -38,19 +38,19 @@ public class KafkaOrderPublisherService implements OrderPublisherService {
     @Override
     public void publish(OrderEvent event) {
         log.debug("Publishing OrderEvent to topic '{}': orderId={}, itemId={}, quantity={}",
-                ordersTopic, event.getOrderId(), event.getItemId(), event.getQuantity());
+                ordersTopic, event.orderId(), event.itemId(), event.quantity());
 
         // Use orderId as the partition key for per-order message ordering
         CompletableFuture<SendResult<String, OrderEvent>> future =
-                kafkaTemplate.send(ordersTopic, event.getOrderId(), event);
+                kafkaTemplate.send(ordersTopic, event.orderId(), event);
 
         future.whenComplete((result, ex) -> {
             if (ex != null) {
                 log.error("Failed to publish OrderEvent: orderId={}, itemId={}, error={}",
-                        event.getOrderId(), event.getItemId(), ex.getMessage(), ex);
+                        event.orderId(), event.itemId(), ex.getMessage(), ex);
             } else {
                 log.info("OrderEvent published: orderId={}, topic={}, partition={}, offset={}",
-                        event.getOrderId(),
+                        event.orderId(),
                         result.getRecordMetadata().topic(),
                         result.getRecordMetadata().partition(),
                         result.getRecordMetadata().offset());

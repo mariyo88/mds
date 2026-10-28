@@ -19,6 +19,9 @@ spring:
 kafka:
   topic:
     orders: orders
+    inventory-results: inventory-results
+  consumer:
+    group-id: order-api-group
 
 management:
   endpoints:
