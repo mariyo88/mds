@@ -16,9 +16,20 @@ public class KafkaTopicConfig {
     @Value("${kafka.topic.orders}")
     private String ordersTopic;
 
+    @Value("${kafka.topic.inventory-results}")
+    private String inventoryResultsTopic;
+
     @Bean
     public NewTopic ordersTopic() {
         return TopicBuilder.name(ordersTopic)
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic inventoryResultsTopic() {
+        return TopicBuilder.name(inventoryResultsTopic)
                 .partitions(3)
                 .replicas(1)
                 .build();

@@ -47,9 +47,9 @@ public class InventoryService {
      * @return a {@link ReservationResult} describing the outcome
      */
     public ReservationResult reserve(OrderEvent event) {
-        String itemId = event.getItemId();
-        String orderId = event.getOrderId();
-        int requested = event.getQuantity();
+        String itemId = event.itemId();
+        String orderId = event.orderId();
+        int requested = event.quantity();
 
         if (!stock.containsKey(itemId)) {
             log.warn("Reservation attempt for unknown item: orderId={}, itemId={}", orderId, itemId);

@@ -9,16 +9,11 @@ import java.util.Objects;
 /**
  * Represents an order event published to Kafka by the Order API
  * and consumed by the Inventory Service.
- *
+ * <p>
  * This class is immutable and shared between both services via the
  * shared-models module to ensure schema consistency.
  */
-public class OrderEvent {
-
-    private final String orderId;
-    private final String itemId;
-    private final int quantity;
-    private final Instant timestamp;
+public record OrderEvent(String orderId, String itemId, int quantity, Instant timestamp) {
 
     @JsonCreator
     public OrderEvent(
@@ -42,22 +37,6 @@ public class OrderEvent {
         return new OrderEvent(orderId, itemId, quantity, Instant.now());
     }
 
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public Instant getTimestamp() {
-        return timestamp;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,11 +45,6 @@ public class OrderEvent {
                 && Objects.equals(orderId, that.orderId)
                 && Objects.equals(itemId, that.itemId)
                 && Objects.equals(timestamp, that.timestamp);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(orderId, itemId, quantity, timestamp);
     }
 
     @Override

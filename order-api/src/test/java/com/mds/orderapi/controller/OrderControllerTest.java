@@ -3,6 +3,7 @@ package com.mds.orderapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mds.orderapi.model.OrderRequest;
 import com.mds.orderapi.service.OrderPublisherService;
+import com.mds.orderapi.store.OrderStatusStore;
 import com.mds.shared.model.OrderEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
@@ -30,6 +35,9 @@ class OrderControllerTest {
 
     @MockBean
     private OrderPublisherService publisherService;
+
+    @MockBean
+    private OrderStatusStore orderStatusStore;
 
     @Test
     @DisplayName("POST /orders with valid payload returns 202 Accepted")
@@ -59,10 +67,10 @@ class OrderControllerTest {
 
         verify(publisherService).publish(captor.capture());
         OrderEvent published = captor.getValue();
-        assertThat(published.getOrderId()).isEqualTo("order-456");
-        assertThat(published.getItemId()).isEqualTo("item-2");
-        assertThat(published.getQuantity()).isEqualTo(5);
-        assertThat(published.getTimestamp()).isNotNull();
+        assertThat(published.orderId()).isEqualTo("order-456");
+        assertThat(published.itemId()).isEqualTo("item-2");
+        assertThat(published.quantity()).isEqualTo(5);
+        assertThat(published.timestamp()).isNotNull();
     }
 
     @Test
